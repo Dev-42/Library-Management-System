@@ -28,4 +28,22 @@ router.post("/", async (req, res) => {
   res.status(201).json(book);
 });
 
+// Get authors by the genre id
+router.get("/genres/:genreId", async (req, res) => {
+  try {
+    const { genreId } = req.params;
+    const books = await Book.findAll({
+      where: { genreId },
+      include: [{ model: Author, attributes: ["name"] }],
+    });
+    const response = books.map((book) => ({
+      authorName: book.Author.name,
+      bookTitle: book.title,
+    }));
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
