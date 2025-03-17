@@ -2,11 +2,12 @@ const express = require("express");
 const { Book, Genre, Author } = require("../models");
 const router = express.Router();
 
+// Route to fetch all the books
 router.get("/", async (req, res) => {
   const books = await Book.findAll({ include: [Author, Genre] });
   res.json(books);
 });
-
+// Route to add a new book
 router.post("/", async (req, res) => {
   const { title, description, publicationYear, authorId, genreIds } = req.body;
 
